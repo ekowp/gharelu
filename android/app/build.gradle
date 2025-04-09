@@ -1,12 +1,12 @@
 plugins {
     id "com.android.application"
     // START: FlutterFire Configuration
-    id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
+    id 'com.google.gms.google-services' // Enables Google Services like Firebase
+    id 'com.google.firebase.crashlytics' // Enables Firebase Crashlytics for error reporting
     // END: FlutterFire Configuration
-    id "kotlin-android"
+    id "kotlin-android" // Applies Kotlin plugin for Android
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id "dev.flutter.flutter-gradle-plugin"
+    id "dev.flutter.flutter-gradle-plugin" // Applies Flutter Gradle plugin
 }
 
 def localProperties = new Properties()
@@ -24,61 +24,57 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    flutterVersionCode = '1' // Default version code
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    flutterVersionName = '1.0' // Default version name
 }
 
 android {
-    namespace = "com.example.gharelu"
-    compileSdk = 34
-
+    namespace = "com.example.byday" // Updated namespace for branding consistency
+    compileSdk = 34 // Sets the SDK version used to compile the app
 
     lintOptions {
-        disable 'InvalidPackage'
+        disable 'InvalidPackage' // Disables specific lint checks
         disable "Instantiatable"
-        checkReleaseBuilds false
-        abortOnError false
-       }
+        checkReleaseBuilds false // Disables lint checks for release builds
+        abortOnError false // Prevents build errors due to lint checks
+    }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17 // Uses Java 17 for compatibility
         targetCompatibility JavaVersion.VERSION_17
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled true // Enables usage of modern Java libraries
     }
-
 
     kotlinOptions {
-         jvmTarget = 17
+        jvmTarget = 17 // Specifies JVM target for Kotlin
     }
 
-
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "app.gharelu"
-        minSdk = 31
-        targetSdk = 34
-        versionCode = flutterVersionCode.toInteger()
-        versionName = flutterVersionName
+        applicationId = "app.byday" // Updated application ID for branding
+        minSdk = 31 // Sets minimum Android version (Android 12 and above)
+        targetSdk = 34 // Sets target SDK to the latest version
+        versionCode = flutterVersionCode.toInteger() // Dynamically sets version code
+        versionName = flutterVersionName // Dynamically sets version name
     }
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // For now, signing with debug keys to support `flutter run --release`
             signingConfig signingConfigs.debug
         }
     }
 }
 
 flutter {
-    source '../..'
+    source '../..' // Sets the Flutter source directory
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" // Kotlin standard library
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2' // For backward compatibility with Java 8+
 }

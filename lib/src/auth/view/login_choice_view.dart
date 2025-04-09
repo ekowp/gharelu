@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gharelu/src/core/assets/assets.gen.dart';
-import 'package:gharelu/src/core/extensions/extensions.dart';
-import 'package:gharelu/src/core/routes/app_router.dart';
-import 'package:gharelu/src/core/theme/app_styles.dart';
-import 'package:gharelu/src/core/theme/theme.dart';
-import 'package:gharelu/src/core/widgets/widgets.dart';
+import 'package:byday/src/core/assets/assets.gen.dart'; // Updated for By Day branding.
+import 'package:byday/src/core/extensions/extensions.dart'; // Updated import path.
+import 'package:byday/src/core/routes/app_router.dart'; // Updated import path.
+import 'package:byday/src/core/theme/app_styles.dart'; // Updated import path.
+import 'package:byday/src/core/theme/theme.dart'; // Updated import path.
+import 'package:byday/src/core/widgets/widgets.dart'; // Updated import path.
 
 @RoutePage()
 class LoginChoiceView extends StatelessWidget {
@@ -26,7 +26,7 @@ class LoginChoiceView extends StatelessWidget {
               Assets.images.logo.image(),
               const Spacer(),
               Text(
-                'Have a Problem you cannot solve? Don\'t worry. Lets Get started',
+                'Have a Problem you cannot solve? Don\'t worry. Let\'s get started',
                 textAlign: TextAlign.center,
                 style: AppStyles.text18PxMedium.white,
               ),

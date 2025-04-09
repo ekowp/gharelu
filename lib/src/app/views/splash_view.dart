@@ -1,17 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gharelu/src/app/provider/auth_status_provider.dart';
-import 'package:gharelu/src/auth/models/custom_user_model.dart';
-import 'package:gharelu/src/core/assets/assets.gen.dart';
-import 'package:gharelu/src/core/extensions/context_extension.dart';
-import 'package:gharelu/src/core/extensions/extensions.dart';
-import 'package:gharelu/src/core/providers/firbease_provider.dart';
-import 'package:gharelu/src/core/routes/app_router.dart';
-import 'package:gharelu/src/core/state/app_state.dart';
-import 'package:gharelu/src/core/theme/app_colors.dart';
-import 'package:gharelu/src/core/theme/app_styles.dart';
-import 'package:gharelu/src/core/widgets/widgets.dart';
+import 'package:byday/src/app/provider/auth_status_provider.dart';
+import 'package:byday/src/auth/models/custom_user_model.dart';
+import 'package:byday/src/core/assets/assets.gen.dart';
+import 'package:byday/src/core/extensions/context_extension.dart';
+import 'package:byday/src/core/extensions/extensions.dart';
+import 'package:byday/src/core/providers/firebase_provider.dart';
+import 'package:byday/src/core/routes/app_router.dart';
+import 'package:byday/src/core/state/app_state.dart';
+import 'package:byday/src/core/theme/app_colors.dart';
+import 'package:byday/src/core/theme/app_styles.dart';
+import 'package:byday/src/core/widgets/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
@@ -20,55 +20,30 @@ class SplashView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // useEffect(() {
-    //   NotificationService.instance.initilize();
-    //   if (ref.read(firebaseAuthProvider).currentUser != null) {
-    //     context.router.replaceAll([const DashboardRouter()]);
-    //   }
-    // }, []);
     ref.listen<AppState<CustomUserModel>>(authStatusNotifierProvider,
         (previous, next) {
       next.maybeWhen(
         orElse: () => null,
         success: (data) {
+          // Trigger any auth change listeners.
           ref.read(authChangeProvider);
           context.showSnackbar(message: 'Welcome Back ${data.name}');
           if (data.isMerchant) {
-            /// navigate to merchant
-            ///
+            // Navigate to the merchant dashboard.
             context.router.replaceAll([const MerchantDashboardRouter()]);
           } else {
+            // Navigate to the user dashboard.
             context.router.replaceAll([const DashboardRouter()]);
           }
         },
         error: (message) async {
           context.showSnackbar(message: message);
-          // ignore: inference_failure_on_instance_creation
           await Future.delayed(const Duration(milliseconds: 300));
           context.router.push(const LoginChoiceRoute());
         },
       );
     });
 
-    // ref.listen(authSatate, (previous, next) {
-    //   if (next != null) {
-    //     log(next.toString());
-    //   }
-    // });
-    // final _authState = ref.watch(authSatate);
-    // return Scaffold(
-    //   backgroundColor: AppColors.primaryColor,
-    //   body: _authState.when(
-    //     data: (data) {
-    //       if (data != null) {
-    //         context.router.replaceAll([const DashboardRouter()]);
-    //       }
-    //       return _body(context);
-    //     },
-    //     error: (message, _) => _body(context),
-    //     loading: () => _body(context),
-    //   ),
-    // );
     return ScaffoldWrapper(
       backgroundColor: AppColors.primaryColor,
       body: _body(context),
@@ -86,7 +61,7 @@ class SplashView extends HookConsumerWidget {
             Assets.images.logo.image(),
             const Spacer(),
             Text(
-              'Have a Problem \nyou cannot solve?\nDon\'t worry. Lets Get started',
+              'Have a Problem \nyou cannot solve?\nDon\'t worry. Let\'s get started',
               textAlign: TextAlign.center,
               style: AppStyles.text18PxMedium.white,
             ),
@@ -94,9 +69,7 @@ class SplashView extends HookConsumerWidget {
             Consumer(builder: (context, ref, _) {
               return ref.watch(authStatusNotifierProvider).maybeWhen(
                     orElse: () => buildButton(ref, context),
-                    success: (data) {
-                      return const SizedBox.shrink();
-                    },
+                    success: (data) => const SizedBox.shrink(),
                     loading: () => const Center(
                       child: CircularProgressIndicator(
                         color: AppColors.whiteColor,

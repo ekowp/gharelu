@@ -1,71 +1,71 @@
 import 'package:auto_route/auto_route.dart';
 import 'dart:io';
-
-import 'package:chat_bubbles/bubbles/bubble_normal_image.dart';
-import 'package:chat_bubbles/bubbles/bubble_special_two.dart';
-import 'package:chat_bubbles/message_bars/message_bar.dart';
+import 'package:chat_bubbles/bubbles/bubble_normal_image.dart'; // Chat UI library for image bubbles.
+import 'package:chat_bubbles/bubbles/bubble_special_two.dart'; // Chat UI library for text bubbles.
+import 'package:chat_bubbles/message_bars/message_bar.dart'; // UI for message input.
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gharelu/src/auth/models/custom_user_model.dart';
-import 'package:gharelu/src/chat/models/message_model.dart';
-import 'package:gharelu/src/chat/providers/get_message_provider.dart';
-import 'package:gharelu/src/chat/providers/send_message_provider.dart';
-import 'package:gharelu/src/core/assets/assets.gen.dart';
-import 'package:gharelu/src/core/constant/app_constant.dart';
-import 'package:gharelu/src/core/extensions/context_extension.dart';
-import 'package:gharelu/src/core/extensions/extensions.dart';
-import 'package:gharelu/src/core/providers/firbease_provider.dart';
-import 'package:gharelu/src/core/theme/app_colors.dart';
-import 'package:gharelu/src/core/theme/app_styles.dart';
-import 'package:gharelu/src/core/widgets/widgets.dart';
-import 'package:gharelu/src/home/models/product_model.dart';
-import 'package:gharelu/src/home/widgets/widgets.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:byday/src/auth/models/custom_user_model.dart'; // Updated for By Day branding.
+import 'package:byday/src/chat/models/message_model.dart'; // Chat message model.
+import 'package:byday/src/chat/providers/get_message_provider.dart'; // Provider for fetching messages.
+import 'package:byday/src/chat/providers/send_message_provider.dart'; // Provider for sending messages.
+import 'package:byday/src/core/assets/assets.gen.dart'; // App assets.
+import 'package:byday/src/core/constant/app_constant.dart'; // Constants for Firestore collections.
+import 'package:byday/src/core/extensions/context_extension.dart'; // Context extensions.
+import 'package:byday/src/core/extensions/extensions.dart'; // Utility extensions for padding, margin, etc.
+import 'package:byday/src/core/providers/firbease_provider.dart'; // Firebase dependency injection.
+import 'package:byday/src/core/theme/app_colors.dart'; // App color palette.
+import 'package:byday/src/core/theme/app_styles.dart'; // App typography styles.
+import 'package:byday/src/core/widgets/widgets.dart'; // Common reusable widgets.
+import 'package:hooks_riverpod/hooks_riverpod.dart'; // State management with Riverpod.
+import 'package:image_picker/image_picker.dart'; // Image picker utility for file selection.
 
+/// ChatDetailView serves as the UI for customer service conversations.
+/// Communication is strictly limited to:
+/// - Client ↔ Customer Service.
+/// - Artisan ↔ Customer Service.
 @RoutePage()
 class ChatDetailView extends StatefulHookConsumerWidget {
   const ChatDetailView({
     Key? key,
     required this.roomId,
-    required this.isMerchant,
+    required this.isArtisan,
     this.product,
-    this.merchant,
-    this.user,
+    this.artisan,
+    this.client,
   }) : super(key: key);
-  final String roomId;
-  final CustomUserModel? user;
-  final CustomUserModel? merchant;
-  final bool isMerchant;
-  final ProductModel? product;
+
+  final String roomId; // Room ID for the chat session.
+  final CustomUserModel? client; // Information about the client (if applicable).
+  final CustomUserModel? artisan; // Information about the artisan (if applicable).
+  final bool isArtisan; // Boolean flag to identify artisan context.
+  final ProductModel? product; // Product details associated with the conversation (optional).
 
   @override
   _ChatDetailViewState createState() => _ChatDetailViewState();
 }
 
 class _ChatDetailViewState extends ConsumerState<ChatDetailView> {
+  late TextEditingController messageController; // Controller for the message input field.
+
+  final ValueNotifier<File?> selectedImage = ValueNotifier<File?>(null); // Tracks selected images.
+
+  String get roomId => widget.roomId; // Retrieves the room ID.
+  bool get isArtisan => widget.isArtisan; // Checks if the context is artisan-based.
+  String? get userId => ref.read(firebaseAuthProvider).currentUser?.uid; // Retrieves the current user ID.
+
   @override
   void initState() {
-    message = TextEditingController();
+    messageController = TextEditingController(); // Initializes the message input controller.
     super.initState();
   }
 
   @override
   void dispose() {
-    ref.invalidate(getMessagesNotifierProvider);
-    message.dispose();
+    ref.invalidate(getMessagesNotifierProvider); // Invalidates the message provider on disposal.
+    messageController.dispose(); // Disposes of the message controller.
     super.dispose();
   }
-
-  late TextEditingController message;
-
-  final ValueNotifier<File?> selectedImage = ValueNotifier<File?>(null);
-
-  String get roomId => widget.roomId;
-
-  bool get isMerchant => widget.isMerchant;
-
-  String? get userId => ref.read(firebaseAuthProvider).currentUser?.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -74,23 +74,25 @@ class _ChatDetailViewState extends ConsumerState<ChatDetailView> {
         title: Row(
           children: [
             GradientCircle(
-                radius: 40.r,
-                showGradient: true,
-                child: CacheImageViewer(
-                  error: (context, url, error) =>
-                      Assets.images.userAvatar.image(fit: BoxFit.cover),
-                )),
+              radius: 40.r,
+              showGradient: true,
+              child: CacheImageViewer(
+                error: (context, url, error) =>
+                    Assets.images.userAvatar.image(fit: BoxFit.cover), // Placeholder image.
+              ),
+            ),
             10.horizontalSpace,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  (widget.product?.name ?? ''),
+                  widget.product?.name ?? '',
                   style: AppStyles.text18PxBold,
-                ),
+                ), // Displays product name (if available).
                 Text(
-                    '${isMerchant ? (widget.user?.name ?? '') : (widget.merchant?.name ?? '')}',
-                    style: AppStyles.text12PxMedium.midGrey)
+                  '${isArtisan ? widget.client?.name ?? '' : widget.artisan?.name ?? ''}',
+                  style: AppStyles.text12PxMedium.midGrey,
+                ), // Displays client/artisan name.
               ],
             ).expanded(),
           ],
@@ -107,42 +109,39 @@ class _ChatDetailViewState extends ConsumerState<ChatDetailView> {
                       .maybeWhen(
                         orElse: () => Container().expanded(),
                         loading: () => context.loader.expanded(),
-                        success: (data) {
-                          if (data.isEmpty) {
+                        success: (messages) {
+                          if (messages.isEmpty) {
                             return SizedBox(
                               child: NoDataFound(
                                 title:
-                                    'Start Conversation with ${isMerchant ? '${widget.user?.name}' : '${widget.merchant?.name}'}',
+                                    'Start Conversation with ${isArtisan ? widget.client?.name : widget.artisan?.name}',
                                 onRefresh: () {
-                                  ref.read(getMessagesNotifierProvider(roomId));
+                                  ref.refresh(getMessagesNotifierProvider(roomId)); // Refresh messages.
                                 },
                               ),
                             ).expanded();
                           }
                           return ListView.builder(
-                            itemCount: data.length,
+                            itemCount: messages.length,
                             reverse: true,
                             itemBuilder: (context, index) {
-                              final message = data[index];
+                              final message = messages[index];
                               if (message.type == MessageType.image) {
                                 return BubbleNormalImage(
-                                  isSender:
-                                      userId == message.senderId ? true : false,
+                                  isSender: userId == message.senderId,
                                   id: message.id,
                                   image: CacheImageViewer(
-                                    imageUrl: message.imageUrl,
+                                    imageUrl: message.imageUrl!,
                                   ),
                                 );
                               }
                               return BubbleSpecialTwo(
                                 text: message.message ?? '',
-                                isSender:
-                                    userId == message.senderId ? true : false,
+                                isSender: userId == message.senderId,
                                 tail: true,
                                 color: userId == message.senderId
                                     ? AppColors.primaryColor
                                     : const Color(0xFFE8E8EE),
-                                delivered: false,
                                 textStyle: userId == message.senderId
                                     ? AppStyles.text14PxRegular.white
                                     : const TextStyle(),
@@ -154,18 +153,18 @@ class _ChatDetailViewState extends ConsumerState<ChatDetailView> {
                 },
               ),
               MessageBar(
-                onSend: (message) {
+                onSend: (messageText) {
                   final now = DateTime.now().millisecondsSinceEpoch;
                   ref.read(sendMessageNotifierProvider.notifier).sendMessage(
                         message: MessageModel(
                           id: '',
-                          userId: widget.user!.uid,
-                          merchantId: widget.merchant!.uid,
+                          userId: widget.client?.uid ?? '',
+                          artisanId: widget.artisan?.uid ?? '',
                           type: selectedImage.value != null
                               ? MessageType.image
                               : MessageType.text,
                           roomId: roomId,
-                          message: message,
+                          message: messageText,
                           senderId: userId!,
                           updatedAt: now,
                         ),
@@ -182,21 +181,18 @@ class _ChatDetailViewState extends ConsumerState<ChatDetailView> {
                         size: 24,
                       ),
                       onTap: () async {
-                        final picker = await ImagePicker()
-                            .pickImage(source: ImageSource.gallery);
-                        if (picker?.path != null) {
+                        final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+                        if (pickedImage?.path != null) {
                           final now = DateTime.now().millisecondsSinceEpoch;
-                          ref
-                              .read(sendMessageNotifierProvider.notifier)
-                              .sendMessage(
+                          ref.read(sendMessageNotifierProvider.notifier).sendMessage(
                                 message: MessageModel(
                                   id: '',
                                   updatedAt: now,
-                                  userId: widget.user!.uid,
-                                  merchantId: widget.merchant!.uid,
+                                  userId: widget.client?.uid ?? '',
+                                  artisanId: widget.artisan?.uid ?? '',
                                   type: MessageType.image,
                                   roomId: roomId,
-                                  imageUrl: picker!.path,
+                                  imageUrl: pickedImage!.path,
                                   senderId: userId!,
                                 ),
                               );
@@ -210,21 +206,21 @@ class _ChatDetailViewState extends ConsumerState<ChatDetailView> {
           ),
           Consumer(builder: (context, ref, _) {
             return ref.watch(sendMessageNotifierProvider).maybeWhen(
-                  orElse: Container.new,
-                  loading: () => Positioned(
-                      child: Container(
-                    height: context.height,
-                    width: context.width,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(.5),
-                    ),
-                    child: context.loader,
-                  )),
-                );
-          })
+              orElse: () => Container(),
+              loading: () => Positioned(
+                child: Container(
+                  height: context.height,
+                  width: context.width,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor.withOpacity(.5),
+                  ),
+                  child: context.loader,
+                ),
+              ),
+            );
+          }),
         ],
       ),
     );
   }
 }
-// 

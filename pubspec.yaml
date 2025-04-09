@@ -1,55 +1,72 @@
-name: gharelu
-description: A new Flutter project.
+# Name of the app updated to "By Day"
+name: by_day
 
+# Description updated to reflect the app's tagline
+description: Trusted Artisans, Quality With Speed
 
+# Version of the app
 version: 1.0.0+0
 
+# Flutter SDK environment configuration
 environment:
   sdk: ">=3.0.5 <4.0.0"
 
+# Core dependencies for the app
 dependencies:
-  auto_route: ^9.2.2
-  cached_network_image: ^3.4.1
-  cloud_firestore: ^5.5.0
-  cupertino_icons: ^1.0.2
-  equatable: ^2.0.3
-  firebase_auth: ^5.3.3
-  firebase_core: ^3.8.0
+  auto_route: ^9.2.2                       # For route management
+  cached_network_image: ^3.4.1             # To cache and display images efficiently
+  cloud_firestore: ^5.5.0                  # Firebase Cloud Firestore for database
+  cupertino_icons: ^1.0.2                  # iOS-style icons for the app
+  equatable: ^2.0.3                        # For easier value comparison
+  firebase_auth: ^5.3.3                    # Firebase authentication for user login/sign-up
+  firebase_core: ^3.8.0                    # Firebase core configuration
+  firebase_messaging: ^14.6.5              # Push notifications using Firebase Cloud Messaging
   flutter:
+    sdk: flutter                           # Flutter framework dependency
+  flutter_localizations:                   # Localization support
     sdk: flutter
-  flutter_screenutil: ^5.9.3
-  flutter_svg: ^2.0.16
-  freezed_annotation: ^2.0.3
-  hooks_riverpod: ^2.0.0-dev.9
-  image_cropper: ^8.0.2
-  image_picker: ^1.0.2
-  json_annotation: ^4.4.0
-  logger: ^2.0.1
-  permission_handler: ^11.3.1
-  url_launcher: ^6.1.5
-  carousel_slider: ^5.0.0
-  chat_bubbles: ^1.3.0
-  dartz: ^0.10.1
-  flutter_map: ^7.0.2
-  dio: ^5.3.2
-  dotted_border: ^2.0.0+2
-  firebase_storage: ^12.3.6
-  calendar_timeline: ^1.0.5
-  khalti_flutter: ^3.0.0
-  webview_flutter: ^4.0.1
-  lottie: ^3.1.3
-  awesome_notifications: ^0.8.2
-  flutter_hooks: ^0.20.0
-  algolia_helper_flutter: ^1.1.0
-  flutter_typeahead: ^5.2.0
-  dropdown_button2: ^2.3.7
-  flutter_native_splash: ^2.2.16
-  get_it: ^8.0.2
-  flutter_dotenv: ^5.0.2
-  frontend_server_client: ^4.0.0
-  velocity_x: ^4.2.1
+  flutter_screenutil: ^5.9.3               # Responsive design across screen sizes
+  flutter_svg: ^2.0.16                     # Support for rendering SVG images
+  freezed_annotation: ^2.0.3               # Annotation for data classes
+  hooks_riverpod: ^2.0.0-dev.9             # State management with Riverpod hooks
+  image_cropper: ^8.0.2                    # To allow image cropping (profile updates, etc.)
+  image_picker: ^1.0.2                     # To pick images from gallery or camera
+  json_annotation: ^4.4.0                  # For JSON serialization
+  logger: ^2.0.1                           # Logging utility for debugging
+  permission_handler: ^11.3.1              # Manage runtime permissions
+  url_launcher: ^6.1.5                     # Open URLs and external apps
+  carousel_slider: ^5.0.0                  # Carousel for sliding banners
+  chat_bubbles: ^1.3.0                     # Chat UI for customer-artisan communication
+  dartz: ^0.10.1                           # Functional programming utilities
+  flutter_map: ^7.0.2                      # Display maps for nearby services
+  dio: ^5.3.2                              # Network requests with Retrofit-like API
+  dotted_border: ^2.0.0+2                  # To draw dotted borders for UI elements
+  firebase_storage: ^12.3.6                # To upload and store files in Firebase
+  calendar_timeline: ^1.0.5                # Display timeline views for scheduling
+  khalti_flutter: ^3.0.0                   # Integration for payment with Khalti (can be localized)
+  stripe_payment: ^1.0.13                  # For Stripe payments integration (optional)
+  razorpay_flutter: ^1.4.0                 # Razorpay for payments (optional)
+  webview_flutter: ^4.0.1                  # Render web content within the app
+  lottie: ^3.1.3                           # Add animations (e.g., loading indicators)
+  awesome_notifications: ^0.8.2            # In-app notifications
+  flutter_hooks: ^0.20.0                   # Simplifies stateful widgets
+  algolia_helper_flutter: ^1.1.0           # Support for Algolia search
+  flutter_typeahead: ^5.2.0                # Suggest search results dynamically
+  dropdown_button2: ^2.3.7                 # Enhanced dropdown button UI
+  flutter_native_splash: ^2.2.16           # Set up the app's splash screen
+  get_it: ^8.0.2                           # Dependency injection for service locators
+  flutter_dotenv: ^5.0.2                   # Load environment variables
+  frontend_server_client: ^4.0.0           # Flutter frontend server utility
+  velocity_x: ^4.2.1                       # Utility for rapid UI development
+  shimmer: ^3.0.0                          # Add shimmer effects for loading states
+  connectivity_plus: ^4.0.0                # Check internet connectivity
+  geolocator: ^9.0.2                       # Retrieve device location
+  intl: ^0.18.0                            # Internationalization and date formatting
+  share_plus: ^7.0.0                       # Share content with other apps
+  qr_code_scanner: ^1.0.1                  # QR Code scanning functionality
+  timeago: ^3.3.0                          # Display relative timestamps (e.g., "2 hours ago")
 
-
+# Dependency overrides to manage conflicts
 dependency_overrides:
   intl: any
   win32: ^5.9.0
@@ -58,39 +75,40 @@ dependency_overrides:
   algolia_client_search: 1.27.1
   algoliasearch: 1.27.1
 
+# Developer dependencies
 dev_dependencies:
-  auto_route_generator: ^9.0.0
-  build_runner: ^2.4.13
-  flutter_gen_runner: ^5.8.0
-  # flutter_osm_plugin: ^0.37.1
-  flutter_launcher_icons: ^0.14.1
-  freezed: ^2.0.3
-  json_serializable: ^6.9.0
-  very_good_analysis: ^6.0.0
+  auto_route_generator: ^9.0.0            # Generates routing logic automatically
+  build_runner: ^2.4.13                   # For code generation (e.g., for freezed classes)
+  flutter_gen_runner: ^5.8.0              # Generates Dart code for assets and colors
+  flutter_launcher_icons: ^0.14.1         # To generate app launcher icons
+  freezed: ^2.0.3                         # Code generation for immutable data classes
+  json_serializable: ^6.9.0               # Converts JSON to Dart models
+  very_good_analysis: ^6.0.0              # For linting and code analysis
 
+# Flutter asset configurations
 flutter_gen:
   output: lib/src/core/assets/
   integrations:
-    flutter_svg: true
-    lottie: true
+    flutter_svg: true                     # Enable SVG asset generation
+    lottie: true                          # Enable Lottie animation integration
 
+# Flutter configurations
 flutter:
-
-  
-  uses-material-design: true
-  assets:
+  uses-material-design: true              # Enables Material Design
+  assets:                                 # List of asset directories
     - assets/images/
     - assets/icons/
     - assets/lottie/
-    - .env
+    - .env                                 # Environment variables configuration file
 
-
+# App branding (launcher icons)
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/gharelu_logo.jpg"
+  image_path: "assets/images/by_day_logo.jpg" # Updated app logo path
   min_sdk_android: 21
 
+# Splash screen configuration with branding
 flutter_native_splash:
-  color: '#7210FF'
-  image: "assets/images/gharelu_logo.jpg"
+  color: '#7210FF'                         # Splash screen background color
+  image: "assets/images/by_day_logo.jpg"   # Updated splash screen logo path

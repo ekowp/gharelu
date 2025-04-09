@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gharelu/src/core/extensions/context_extension.dart';
-import 'package:gharelu/src/core/extensions/extensions.dart';
-import 'package:gharelu/src/core/providers/firbease_provider.dart';
-import 'package:gharelu/src/core/theme/app_styles.dart';
-import 'package:gharelu/src/core/widgets/widgets.dart';
+import 'package:byday/src/core/extensions/context_extension.dart';
+import 'package:byday/src/core/extensions/extensions.dart';
+import 'package:byday/src/core/providers/firebase_provider.dart';
+import 'package:byday/src/core/theme/app_styles.dart';
+import 'package:byday/src/core/widgets/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
@@ -20,12 +20,11 @@ class VerifyEmailView extends StatefulWidget {
 
 class _VerifyEmailViewState extends State<VerifyEmailView> {
   bool isVerified = false;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        return isVerified;
-      },
+      onWillPop: () async => isVerified,
       child: ScaffoldWrapper(
         body: Center(
           child: Column(
@@ -37,13 +36,12 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 TextSpan(
                   style: AppStyles.text14PxLight,
                   children: [
-                    const TextSpan(text: 'We\'ve sent email to '),
+                    const TextSpan(text: 'We\'ve sent an email to '),
                     TextSpan(
                       text: widget.email,
                       style: AppStyles.text14PxMedium.primary,
                     ),
-                    const TextSpan(
-                        text: ' Please verify your email and continue.'),
+                    const TextSpan(text: ' Please verify your email and continue.'),
                   ],
                 ),
                 textAlign: TextAlign.center,
@@ -55,12 +53,12 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                     title: 'Continue',
                     isDisabled: false,
                     onPressed: () async {
-                      final _ref = ref.read(firebaseAuthProvider);
-                      await _ref.currentUser?.reload();
-                      final currentUser = _ref.currentUser;
+                      final authProvider = ref.read(firebaseAuthProvider);
+                      await authProvider.currentUser?.reload();
+                      final currentUser = authProvider.currentUser;
                       isVerified = currentUser?.emailVerified ?? false;
                       if (currentUser?.emailVerified == false) {
-                        context.showSnackbar(message: 'Email Not Verified yet');
+                        context.showSnackbar(message: 'Email not verified yet');
                       } else {
                         context.router.maybePop();
                       }

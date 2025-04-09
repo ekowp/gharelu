@@ -25,7 +25,7 @@ Flutter/app.zip
 Flutter/flutter_assets/
 Flutter/flutter_export_environment.sh
 ServiceDefinitions.json
-Runner/GeneratedPluginRegistrant.*
+ByDay/GeneratedPluginRegistrant.*
 
 # Exceptions to above rules.
 !default.mode1v3
@@ -33,4 +33,4 @@ Runner/GeneratedPluginRegistrant.*
 !default.pbxuser
 !default.perspectivev3
 firebase_app_id_file.json
-Runner/GoogleService-Info.plist
+ByDay/GoogleService-Info.plist

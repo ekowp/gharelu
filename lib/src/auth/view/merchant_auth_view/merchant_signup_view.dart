@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gharelu/src/auth/providers/forms/signup/merchant_signup_form_provider.dart';
-import 'package:gharelu/src/auth/providers/merchant_signup_provider.dart';
-import 'package:gharelu/src/auth/widgets/widgets.dart';
-import 'package:gharelu/src/core/extensions/context_extension.dart';
-import 'package:gharelu/src/core/extensions/extensions.dart';
-import 'package:gharelu/src/core/routes/app_router.dart';
-import 'package:gharelu/src/core/state/app_state.dart';
-import 'package:gharelu/src/core/theme/app_styles.dart';
-import 'package:gharelu/src/core/widgets/widgets.dart';
+import 'package:byday/src/auth/providers/forms/signup/merchant_signup_form_provider.dart'; // Updated for By Day branding.
+import 'package:byday/src/auth/providers/merchant_signup_provider.dart'; // Updated for By Day branding.
+import 'package:byday/src/auth/widgets/widgets.dart'; // Updated for By Day branding.
+import 'package:byday/src/core/extensions/context_extension.dart'; // Updated import path.
+import 'package:byday/src/core/extensions/extensions.dart'; // Updated import path.
+import 'package:byday/src/core/routes/app_router.dart'; // Updated import path.
+import 'package:byday/src/core/state/app_state.dart'; // Updated import path.
+import 'package:byday/src/core/theme/app_styles.dart'; // Updated import path.
+import 'package:byday/src/core/widgets/widgets.dart'; // Updated import path.
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -22,6 +22,7 @@ class MerchantSignupView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Listen for the signup events.
     ref.listen(merchantSignupProvider, (previous, next) {
       final state = next as AppState;
       state.maybeWhen(
@@ -33,6 +34,7 @@ class MerchantSignupView extends HookConsumerWidget {
         },
       );
     });
+
     final _name = useTextEditingController();
     final _email = useTextEditingController();
     final _phoneNumber = useTextEditingController();
@@ -149,7 +151,6 @@ class MerchantSignupView extends HookConsumerWidget {
                     MapPickerRoute(
                       onSuccess: (location, placeId, latlng) {
                         context.router.maybePop();
-                        // ref.read(merchantSignupProvider).
                         ref
                             .read(merchantSignupFormProvider.notifier)
                             .setLocation(location);

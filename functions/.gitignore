@@ -1,1 +1,39 @@
-node_modules/
+# .gitignore for "By Day" Mobile App
+
+# === Build Artifacts & Generated Files ===
+# Exclude build output directories for Flutter
+build/
+.android/
+.ios/
+.dart_tool/
+
+# Automatically generated files by Flutter
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-versions
+
+# Gradle wrapper files and caches
+gradle-wrapper.jar
+/.gradle
+/gradlew
+/gradlew.bat
+
+# Captured files (e.g., screenshots during testing)
+captures/
+
+# Flutter generated code (do not modify these files)
+GeneratedPluginRegistrant.java
+
+# === Local and Sensitive Files ===
+# Local configuration properties
+/local.properties
+
+# Firebase configuration - contains sensitive project settings
+app/google-services.json
+
+# === Security: Keystore Files (Never commit these!) ===
+# Keystore and key properties used for app signing
+key.properties
+**/*.keystore
+**/*.jks

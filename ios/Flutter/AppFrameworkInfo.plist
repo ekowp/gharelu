@@ -2,25 +2,44 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+  <!-- The default region for localized resources -->
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
+  
+  <!-- Name of the executable -->
   <key>CFBundleExecutable</key>
-  <string>App</string>
+  <string>ByDayApp</string> <!-- Updated for branding -->
+
+  <!-- Unique identifier for the app -->
   <key>CFBundleIdentifier</key>
-  <string>io.flutter.flutter.app</string>
+  <string>com.byday.artisans.app</string> <!-- Updated for branding -->
+
+  <!-- Version of the Info.plist format -->
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
+  
+  <!-- Display name of the app -->
   <key>CFBundleName</key>
-  <string>App</string>
+  <string>By Day</string> <!-- Updated for branding -->
+
+  <!-- Package type identifier -->
   <key>CFBundlePackageType</key>
   <string>FMWK</string>
+  
+  <!-- Short version string displayed to users -->
   <key>CFBundleShortVersionString</key>
   <string>1.0</string>
+  
+  <!-- App signature, to be replaced with appropriate value -->
   <key>CFBundleSignature</key>
-  <string>????</string>
+  <string>BDAY</string> <!-- Updated signature for branding -->
+
+  <!-- Build version of the app -->
   <key>CFBundleVersion</key>
   <string>1.0</string>
+  
+  <!-- Minimum supported iOS version -->
   <key>MinimumOSVersion</key>
-  <string>11.0</string>
+  <string>12.0</string> <!-- Updated to a more modern version -->
 </dict>
 </plist>

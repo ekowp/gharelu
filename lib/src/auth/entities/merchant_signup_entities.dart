@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:gharelu/src/core/extensions/extensions.dart';
-import 'package:gharelu/src/core/validations/field.dart';
+import 'package:byday/src/core/extensions/extensions.dart';
+import 'package:byday/src/core/validations/field.dart';
 
 part 'merchant_signup_entities.freezed.dart';
 

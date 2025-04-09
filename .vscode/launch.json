@@ -2,10 +2,10 @@
   "version": "1.0.0",
   "configurations": [
     {
-      "name": "Launch development",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-    },
+      "name": "Launch By Day Development", // Updated name for branding
+      "request": "launch", // Specifies the request type for launching the app
+      "type": "dart", // Indicates the Dart framework being used
+      "program": "lib/main.dart" // Entry point of the Flutter application
+    }
   ]
 }

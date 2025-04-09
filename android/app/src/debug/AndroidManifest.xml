@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.gharelu">
-    <!-- Flutter needs it to communicate with the running application
-         to allow setting breakpoints, to provide hot reload, etc.
-    -->
+    package="com.example.byday">
+    
+    <!-- General permission for internet access
+         Required for communication, hot reload, and API calls -->
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Add other permissions as needed for additional functionality -->
 </manifest>

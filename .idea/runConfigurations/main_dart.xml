@@ -1,5 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+  <!-- Configuration for running the main.dart file -->
+  <configuration default="false" name="By Day" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <!-- The file path to the main entry point of the app -->
     <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
     <method />
   </configuration>

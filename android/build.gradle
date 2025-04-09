@@ -1,34 +1,40 @@
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.7.10' // Defines the Kotlin version for compatibility
     repositories {
-        google()
-        mavenCentral()
+        google() // Google's Maven repository
+        mavenCentral() // Central Maven repository
     }
 
     dependencies {
+        // Android Gradle Plugin for building Android apps
         classpath 'com.android.tools.build:gradle:7.2.0'
+
         // START: FlutterFire Configuration
+        // Google Services (Firebase) configuration
         classpath 'com.google.gms:google-services:4.3.10'
         // END: FlutterFire Configuration
+
+        // Kotlin Gradle Plugin for Kotlin support
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 allprojects {
     repositories {
-        google()
-        mavenCentral()
+        google() // Ensures all subprojects can access Google's repository
+        mavenCentral() // Ensures all subprojects can access MavenCentral repository
     }
 }
 
-rootProject.buildDir = '../build'
+rootProject.buildDir = '../build' // Sets the root project's build directory
+
 subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.buildDir = "${rootProject.buildDir}/${project.name}" // Sets build directories for subprojects
 }
 subprojects {
-    project.evaluationDependsOn(':app')
+    project.evaluationDependsOn(':app') // Ensures evaluation of the app module dependencies
 }
 
 tasks.register("clean", Delete) {
-    delete rootProject.buildDir
+    delete rootProject.buildDir // Registers a task to clean the root project build directory
 }

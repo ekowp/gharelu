@@ -1,44 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" 
+          version="3.0" 
+          toolsVersion="12121" 
+          systemVersion="16G29" 
+          targetRuntime="iOS.CocoaTouch" 
+          propertyAccessControl="none" 
+          useAutolayout="YES" 
+          launchScreen="YES" 
+          colorMatched="YES" 
+          initialViewController="MainVC">
     <dependencies>
+        <!-- Target iOS deployment -->
         <deployment identifier="iOS"/>
+        <!-- Cocoa Touch plugin required by Interface Builder -->
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!-- Launch Screen Scene -->
         <scene sceneID="EHf-IW-A2E">
             <objects>
-                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                <viewController id="MainVC" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Ydg-fD-yQy"/>
-                        <viewControllerLayoutGuide type="bottom" id="xbc-2k-c8Z"/>
+                        <!-- Top and bottom layout guides for safe area support -->
+                        <viewControllerLayoutGuide type="top" id="topGuide"/>
+                        <viewControllerLayoutGuide type="bottom" id="bottomGuide"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                    <view key="view" contentMode="scaleToFill" id="MainView">
+                        <!-- Allow the view to resize with the device -->
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="LaunchBackground" translatesAutoresizingMaskIntoConstraints="NO" id="tWc-Dq-wcI"/>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4"></imageView>
+                            <!-- Background ImageView: fills entire view -->
+                            <imageView 
+                                clipsSubviews="YES" 
+                                contentMode="scaleToFill" 
+                                image="ByDayBackground" 
+                                translatesAutoresizingMaskIntoConstraints="NO" 
+                                id="BGImage"/>
+                            <!-- Logo ImageView: centered with an aspect-fit scaling -->
+                            <imageView 
+                                opaque="NO" 
+                                clipsSubviews="YES" 
+                                contentMode="scaleAspectFit" 
+                                image="ByDayLogo" 
+                                translatesAutoresizingMaskIntoConstraints="NO" 
+                                id="LogoImage"/>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <!-- Set a neutral background color in case images fail to load -->
+                        <color key="backgroundColor" red="0.95" green="0.95" blue="0.95" alpha="1" 
+                               colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="3T2-ad-Qdv"/>
-                            <constraint firstItem="tWc-Dq-wcI" firstAttribute="bottom" secondItem="Ze5-6b-2t3" secondAttribute="bottom" id="RPx-PI-7Xg"/>
-                            <constraint firstItem="tWc-Dq-wcI" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="SdS-ul-q2q"/>
-                            <constraint firstAttribute="trailing" secondItem="tWc-Dq-wcI" secondAttribute="trailing" id="Swv-Gf-Rwn"/>
-                            <constraint firstAttribute="trailing" secondItem="YRO-k0-Ey4" secondAttribute="trailing" id="TQA-XW-tRk"/>
-                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="bottom" secondItem="Ze5-6b-2t3" secondAttribute="bottom" id="duK-uY-Gun"/>
-                            <constraint firstItem="tWc-Dq-wcI" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="kV7-tw-vXt"/>
-                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="xPn-NY-SIU"/>
+                            <!-- Background Image: Pin all edges to the superview -->
+                            <constraint firstItem="BGImage" firstAttribute="top" secondItem="MainView" secondAttribute="top" id="BG_Top"/>
+                            <constraint firstItem="BGImage" firstAttribute="bottom" secondItem="MainView" secondAttribute="bottom" id="BG_Bottom"/>
+                            <constraint firstItem="BGImage" firstAttribute="leading" secondItem="MainView" secondAttribute="leading" id="BG_Leading"/>
+                            <constraint firstItem="BGImage" firstAttribute="trailing" secondItem="MainView" secondAttribute="trailing" id="BG_Trailing"/>
+                            
+                            <!-- Logo Image: Center horizontally and vertically in the view -->
+                            <constraint firstItem="LogoImage" firstAttribute="centerX" secondItem="MainView" secondAttribute="centerX" id="Logo_CenterX"/>
+                            <constraint firstItem="LogoImage" firstAttribute="centerY" secondItem="MainView" secondAttribute="centerY" id="Logo_CenterY"/>
+                            <!-- Logo Image: Width equals 50% of the MainView width -->
+                            <constraint firstItem="LogoImage" firstAttribute="width" secondItem="MainView" secondAttribute="width" multiplier="0.5" id="Logo_Width"/>
+                            <!-- Ensure the logo remains square -->
+                            <constraint firstItem="LogoImage" firstAttribute="height" secondItem="LogoImage" secondAttribute="width" multiplier="1" id="Logo_Height"/>
+                            
+                            <!-- Optional: Respect the safe area -->
+                            <constraint firstItem="BGImage" firstAttribute="top" secondItem="topGuide" secondAttribute="bottom" id="SafeArea_Top" />
+                            <constraint firstItem="BGImage" firstAttribute="bottom" secondItem="bottomGuide" secondAttribute="top" id="SafeArea_Bottom" />
                         </constraints>
                     </view>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <!-- Placeholder for First Responder -->
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Responder" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <!-- Canvas location for editing convenience -->
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchImage" width="1024" height="1024"/>
-        <image name="LaunchBackground" width="1" height="1"/>
+        <!-- Image assets for "By Day" branding -->
+        <image name="ByDayLogo" width="1024" height="1024"/>
+        <image name="ByDayBackground" width="2048" height="2048"/>
     </resources>
 </document>

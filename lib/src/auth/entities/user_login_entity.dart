@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:gharelu/src/core/validations/field.dart';
+import 'package:byday/src/core/validations/field.dart';
 
 part 'user_login_entity.freezed.dart';
 

@@ -1,28 +1,42 @@
 pluginManagement {
     def flutterSdkPath = {
+        // Load Flutter SDK path from local.properties file
         def properties = new Properties()
         file("local.properties").withInputStream { properties.load(it) }
         def flutterSdkPath = properties.getProperty("flutter.sdk")
+        // Ensure Flutter SDK path is defined
         assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
         return flutterSdkPath
     }()
 
+    // Include Flutter tools for Gradle builds
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
     repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
+        google() // Google's Maven repository for Android dependencies
+        mavenCentral() // Central Maven repository for Java/Kotlin dependencies
+        gradlePluginPortal() // Plugin portal for additional Gradle plugins
     }
 }
 
 plugins {
+    // Flutter plugin loader for managing Flutter build scripts
     id "dev.flutter.flutter-plugin-loader" version "1.0.0"
+
+    // Android application plugin
     id "com.android.application" version "8.7.0" apply false
+
+    // Firebase and Google services plugin
     id "com.google.gms.google-services" version "4.3.15" apply false
+
+    // Kotlin Android plugin for compatibility
     id "org.jetbrains.kotlin.android" version "2.0.20" apply false
+
+    // Firebase Crashlytics plugin for error reporting
     id "com.google.firebase.crashlytics" version "2.8.1" apply false
+
+    // Firebase Performance Monitoring plugin for app performance insights
     id "com.google.firebase.firebase-perf" version "1.4.2" apply false
 }
 
-include ":app"
+include ":app" // Includes the app module for building the main application

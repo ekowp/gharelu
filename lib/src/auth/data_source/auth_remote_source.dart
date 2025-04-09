@@ -4,14 +4,13 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gharelu/src/auth/models/custom_user_model.dart';
-import 'package:gharelu/src/core/collections/firebase_db_collection.dart';
-import 'package:gharelu/src/core/constant/app_constant.dart';
-import 'package:gharelu/src/core/enum/auth_type.dart';
-import 'package:gharelu/src/core/errors/app_error.dart';
-import 'package:gharelu/src/core/helpers/storage_helper.dart';
-import 'package:gharelu/src/core/providers/firbease_provider.dart';
+import 'package:byday/src/auth/models/custom_user_model.dart';
+import 'package:byday/src/core/collections/firebase_db_collection.dart';
+import 'package:byday/src/core/constant/app_constant.dart';
+import 'package:byday/src/core/enum/auth_type.dart';
+import 'package:byday/src/core/errors/app_error.dart';
+import 'package:byday/src/core/helpers/storage_helper.dart';
+import 'package:byday/src/core/providers/firebase_provider.dart';
 import 'package:logger/logger.dart';
 
 abstract class _AuthRemoteSource {
@@ -41,11 +40,15 @@ abstract class _AuthRemoteSource {
     required String location,
   });
 
-  Future<Either<AppError, CustomUserModel>> getUserInfo(
-      {required String id, bool isMerchant = false});
+  Future<Either<AppError, CustomUserModel>> getUserInfo({
+    required String id,
+    bool isMerchant = false,
+  });
 
-  Future<Either<AppError, bool>> deleteUser(
-      {String? message, required String password});
+  Future<Either<AppError, bool>> deleteUser({
+    String? message,
+    required String password,
+  });
 
   Future<Either<AppError, bool>> logout();
 }
@@ -56,11 +59,15 @@ class AuthRemoteSource implements _AuthRemoteSource {
   }
   late int _dateInMulluSecondSinceEpoch;
   final Ref _reader;
+
   @override
-  Future<Either<AppError, User?>> loginAsUser(
-      {required String email, required String password}) async {
+  Future<Either<AppError, User?>> loginAsUser({
+    required String email,
+    required String password,
+  }) async {
     try {
-      final response = await _reader.read(firebaseAuthProvider)
+      final response = await _reader
+          .read(firebaseAuthProvider)
           .signInWithEmailAndPassword(email: email, password: password);
       if (response.user != null) {
         final _user = response.user;
@@ -73,19 +80,20 @@ class AuthRemoteSource implements _AuthRemoteSource {
         return left(const AppError.serverError(message: 'Failed to Login'));
       }
     } on FirebaseAuthException catch (e) {
-      return left(
-          AppError.serverError(message: e.message ?? 'Failed to Login'));
+      return left(AppError.serverError(message: e.message ?? 'Failed to Login'));
     }
   }
 
   @override
-  Future<Either<AppError, User?>> signupUser(
-      {required String name,
-      required String email,
-      required String password,
-      required String location}) async {
+  Future<Either<AppError, User?>> signupUser({
+    required String name,
+    required String email,
+    required String password,
+    required String location,
+  }) async {
     try {
-      final response = await _reader.read(firebaseAuthProvider)
+      final response = await _reader
+          .read(firebaseAuthProvider)
           .createUserWithEmailAndPassword(email: email, password: password);
       if (response.user != null) {
         final _customUser = CustomUserModel(
@@ -98,7 +106,8 @@ class AuthRemoteSource implements _AuthRemoteSource {
           createdAt: _dateInMulluSecondSinceEpoch,
         );
 
-        await _reader.read(firestoreProvider)
+        await _reader
+            .read(firestoreProvider)
             .collection(AppConstant.users)
             .doc(_customUser.uid)
             .set(_customUser.toJson());
@@ -112,10 +121,13 @@ class AuthRemoteSource implements _AuthRemoteSource {
   }
 
   @override
-  Future<Either<AppError, User?>> merchantLogin(
-      {required String email, required String password}) async {
+  Future<Either<AppError, User?>> merchantLogin({
+    required String email,
+    required String password,
+  }) async {
     try {
-      final response = await _reader.read(firebaseAuthProvider)
+      final response = await _reader
+          .read(firebaseAuthProvider)
           .signInWithEmailAndPassword(email: email, password: password);
       if (response.user != null) {
         final _user = response.user;
@@ -135,11 +147,10 @@ class AuthRemoteSource implements _AuthRemoteSource {
     }
   }
 
-  /// heper class for checking is user is merchant or not
-  ///
-  /// return `false` if user is not a merchant
+  /// Helper method to check if the user is a merchant.
   Future<bool> _isMerchant(String userId) async {
-    final data = (await _reader.read(firestoreProvider)
+    final data = (await _reader
+            .read(firestoreProvider)
             .collection(AppConstant.merchants)
             .doc(userId)
             .get())
@@ -186,7 +197,8 @@ class AuthRemoteSource implements _AuthRemoteSource {
           phoneNumber: phoneNumber,
         );
 
-        await _reader.read(firestoreProvider)
+        await _reader
+            .read(firestoreProvider)
             .collection(AppConstant.merchants)
             .doc(_customUser.uid)
             .set(_customUser.toJson());
@@ -202,17 +214,21 @@ class AuthRemoteSource implements _AuthRemoteSource {
   }
 
   @override
-  Future<Either<AppError, CustomUserModel>> getUserInfo(
-      {required String id, bool isMerchant = false}) async {
+  Future<Either<AppError, CustomUserModel>> getUserInfo({
+    required String id,
+    bool isMerchant = false,
+  }) async {
     try {
       late DocumentSnapshot<Map<String, dynamic>> response;
       if (isMerchant) {
-        response = await _reader.read(firestoreProvider)
+        response = await _reader
+            .read(firestoreProvider)
             .collection(AppConstant.merchants)
             .doc(id)
             .get();
       } else {
-        response = await _reader.read(firestoreProvider)
+        response = await _reader
+            .read(firestoreProvider)
             .collection(AppConstant.users)
             .doc(id)
             .get();
@@ -237,8 +253,8 @@ class AuthRemoteSource implements _AuthRemoteSource {
     try {
       final now = DateTime.now().millisecondsSinceEpoch;
       final currentUser = _reader.read(firebaseAuthProvider).currentUser;
-
-      final response = await _reader.read(firebaseAuthProvider)
+      final response = await _reader
+          .read(firebaseAuthProvider)
           .currentUser
           ?.reauthenticateWithCredential(
             EmailAuthProvider.credential(
@@ -247,32 +263,30 @@ class AuthRemoteSource implements _AuthRemoteSource {
             ),
           );
       if (response != null) {
-        await Future.wait(Iterable.castFrom([
+        await Future.wait([
           _reader.read(firestoreProvider).collection(AppConstant.feedback).add({
             'message': message,
-            'user_id': currentUser?.uid,
-            'email': currentUser?.email,
+            'user_id': currentUser.uid,
+            'email': currentUser.email,
             'created_at': now,
             'updated_at': now,
           }),
-          _reader.read(firestoreProvider)
-              .collection(
-                  isMerchant ? AppConstant.merchants : AppConstant.users)
-              .doc(currentUser?.uid)
+          _reader
+              .read(firestoreProvider)
+              .collection(isMerchant ? AppConstant.merchants : AppConstant.users)
+              .doc(currentUser.uid)
               .delete(),
           _reader.read(firebaseAuthProvider).currentUser?.delete(),
-        ]));
+        ]);
         return right(true);
       } else {
         return left(
             const AppError.serverError(message: 'Failed to Delete User'));
       }
     } on FirebaseAuthException catch (e) {
-      return left(
-          AppError.serverError(message: e.message ?? 'Failed to Delete User'));
+      return left(AppError.serverError(message: e.message ?? 'Failed to Delete User'));
     } on FirebaseException catch (e) {
-      return left(
-          AppError.serverError(message: e.message ?? 'Failed to Delete User'));
+      return left(AppError.serverError(message: e.message ?? 'Failed to Delete User'));
     }
   }
 
@@ -282,11 +296,9 @@ class AuthRemoteSource implements _AuthRemoteSource {
       await _reader.read(firebaseAuthProvider).signOut();
       return right(true);
     } on FirebaseAuthException catch (e) {
-      return left(
-          AppError.serverError(message: e.message ?? 'Failed to Delete User'));
+      return left(AppError.serverError(message: e.message ?? 'Failed to Logout'));
     } on FirebaseException catch (e) {
-      return left(
-          AppError.serverError(message: e.message ?? 'Failed to Delete User'));
+      return left(AppError.serverError(message: e.message ?? 'Failed to Logout'));
     }
   }
 }
